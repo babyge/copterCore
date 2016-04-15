@@ -166,7 +166,6 @@ void copter_ImportantTasks(void) {
  * whenever nothing important has to be done (e.g. in the main-loop)
  */
 void copter_UnimportantTasks(void) {
-	led_Cmd(3, LED_ON);
 	/******************************************************
 	 * section 4: check for timeouts
 	 *****************************************************/
@@ -362,7 +361,6 @@ void copter_UnimportantTasks(void) {
 				mag_Calibrate(STOP);
 		}
 	}
-	led_Cmd(3, LED_OFF);
 }
 
 /*
