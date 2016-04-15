@@ -80,6 +80,9 @@ void copter_MainProgram(void) {
 	bootComplete = 1;
 
 	while (1) {
+#ifdef SIMULATION
+		Simulation::Instance()->Handler();
+#endif
 		copter_UnimportantTasks();
 		if (time_TimerElapsed(&GPSInitTimer)) {
 			log_LogFileEntry("initializing GPS...");

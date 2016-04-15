@@ -17,6 +17,9 @@
 #include "gyro.h"
 #include "hott.h"
 #include "sensorDeviation.h"
+#ifdef SIMULATION
+#include "Simulation.h"
+#endif
 
 void copter_MainProgram(void);
 
