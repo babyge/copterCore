@@ -27,9 +27,9 @@ char* ftoa(float num, char* out) {
 
 char* StringCopy(char *n, char *old) {
 	while (*old) {
-		*new++ = *old++;
+		*n++ = *old++;
 	}
-	return new;
+	return n;
 }
 
 /*
