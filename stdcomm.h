@@ -12,6 +12,7 @@
 #include "hal.h"
 #include "String/stringconversion.h"
 #include "pressure.h"
+#include "sensorDeviation.h"
 
 // message IDs
 #define MESSAGE_REQUEST_CONFIG		0x01

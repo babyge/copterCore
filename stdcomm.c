@@ -32,7 +32,7 @@ void stdComm_MessageHandler(uint8_t id) {
 		stdComm_SendMessage(MESSAGE_ACK, 0, 0);
 		eeprom_SaveConfig();
 		break;
-	case MESSAGE_TRIGGER_STEPRES:
+	case MESSAGE_TRIGGER_STEPRES: {
 		;
 		union {
 			float f;
@@ -47,14 +47,15 @@ void stdComm_MessageHandler(uint8_t id) {
 		uint16_t response = (com.RecBuffer[11] << 8) + com.RecBuffer[12];
 		uint16_t interval = (com.RecBuffer[13] << 8) + com.RecBuffer[14];
 		// attempt to start the step response
-		if (StepResponse_Start(com.RecBuffer[0], stepsize.f, power.f, advance,
-				response, interval) == SUCCESS) {
+		if (StepResponse_Start((StepResponseType) com.RecBuffer[0], stepsize.f,
+				power.f, advance, response, interval) == SUCCESS) {
 			// step response started -> send ACK message
 			stdComm_SendMessage(MESSAGE_ACK, 0, 0);
 		} else {
 			// error while starting step response -> send NACK message
 			stdComm_SendMessage(MESSAGE_NACK, 0, 0);
 		}
+	}
 		break;
 	case MESSAGE_REQUEST_BARO_CALIB:
 		stdComm_SendMessage(MESSAGE_SEND_BARO_CALIB,
