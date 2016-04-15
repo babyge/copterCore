@@ -14,7 +14,7 @@
 
 char* ftoa(float num, char* out);
 
-char* StringCopy(char *new, char *old);
+char* StringCopy(char *n, char *old);
 
 /*
  * Compares two strings. Returns 1 if they have the same content,

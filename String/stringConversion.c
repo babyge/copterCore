@@ -25,7 +25,7 @@ char* ftoa(float num, char* out) {
 	return itoASCII(l, out);
 }
 
-char* StringCopy(char *new, char *old) {
+char* StringCopy(char *n, char *old) {
 	while (*old) {
 		*new++ = *old++;
 	}
