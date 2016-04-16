@@ -9,10 +9,7 @@
 
 #define EXTERNAL_DATA_BAUD 38400
 
-#define DEG_TO_RAD		0.017453292f
-#define RAD_TO_DEG		57.29578f
-
-struct {
+struct ExternalSensor{
 	// measured angle in radiant
 	float angle;
 	FlagStatus valid;
@@ -21,7 +18,9 @@ struct {
 	FlagStatus transmissionStarted;
 	uint8_t bytecount;
 	uint8_t degreeBuffer;
-} externalSensor;
+};
+
+extern struct ExternalSensor externalSensor;
 
 void externalData_IncomingData(uint8_t data);
 

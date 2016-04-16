@@ -20,14 +20,15 @@
 //#define GYRO_SCALE				(1.0f/65.5f)*DEG_TO_RAD // 500°/s
 #define GYRO_SCALE				(1.0f/16.4f)*DEG_TO_RAD // 2000°/s
 
-struct {
+struct Gyro{
 	float X, Y, Z;
 	int16_t rawX, rawY, rawZ;
 	uint8_t rawValues[6];
 	uint32_t timestampUpdate, timestampChange;
 	FlagStatus valid;
-} gyro;
+};
 
+extern struct Gyro gyro;
 
 /*
  * writes the values from gyroDataRX into the gyro structur

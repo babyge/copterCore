@@ -1,5 +1,7 @@
 #include "gps.h"
 
+struct GPS gps;
+
 /*
  * initializes the GPS modul (should be called some time after power-up, e.g. after
  * 2 seconds)

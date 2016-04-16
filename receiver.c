@@ -7,6 +7,8 @@
 
 #include "receiver.h"
 
+struct Receiver receiver;
+
 /*
  * decodes channel 5 and 6 and calculates the 15 switch positions
  *

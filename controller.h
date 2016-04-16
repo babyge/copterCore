@@ -55,7 +55,7 @@ struct pidControl {
 	uint16_t *interval;
 };
 
-struct {
+struct Control{
 	struct {
 		struct pidControl X, Y, Z;
 	} angularVelocity;
@@ -71,7 +71,9 @@ struct {
 	VerticalCtrlStruct structureVertical;
 	HorizontalCtrlStruct structureHorizontal;
 	YawCtrlStruct structureYaw;
-} control;
+};
+
+extern struct Control control;
 
 /*
  * resets all controllers and initializes the pointers in the controller structs

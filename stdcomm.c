@@ -7,6 +7,8 @@
 
 #include "stdcomm.h"
 
+
+struct Com com;
 /*
  * interprets incoming messages and sends the appropriate response
  */

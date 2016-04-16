@@ -13,11 +13,13 @@
 #define DISTANCE_SENSOR_ABOVE_GROUND	0.13f
 #define SHARP_MAXIMUM_DISTANCE			1.0f
 
-struct {
+struct Distance{
 	float bottom;
 	uint32_t timestamp;
 	FlagStatus valid;
-} distance;
+};
+
+extern struct Distance distance;
 
 // calculates distance(s) based on current ADC readings
 void distance_Update(void);

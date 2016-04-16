@@ -131,7 +131,7 @@
 #define KALMAN_Z_GYRO_Y			7
 #define KALMAN_Z_GYRO_Z			8
 
-struct {
+struct Kalman{
 	float x[KALMAN_STATES];
 	float *q[KALMAN_STATES];
 	float *z[KALMAN_MEASUREMENTS];
@@ -140,7 +140,9 @@ struct {
 	float kValues[KALMAN_STATES][KALMAN_MEASUREMENTS];
 	uint32_t timestamp;
 	float timeDiff;
-} kalman;
+};
+
+extern struct Kalman kalman;
 
 /*
  * initializes the kalman matrices

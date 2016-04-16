@@ -7,6 +7,8 @@
 
 #include "gyro.h"
 
+struct Gyro gyro;
+
 /*
  * writes the values from gyroDataRX into the gyro structur
  */

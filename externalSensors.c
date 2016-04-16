@@ -1,5 +1,7 @@
 #include "externalSensors.h"
 
+struct ExternalSensor externalSensor;
+
 void externalData_IncomingData(uint8_t data) {
 	if (data == 0x01 && externalSensor.transmissionStarted == RESET) {
 		// start of transmission detected

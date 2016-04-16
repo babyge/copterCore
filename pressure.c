@@ -1,5 +1,7 @@
 #include "pressure.h"
 
+struct Pressure pressure;
+
 /*
  * contains the temperature for a given ADC value
  * (index = ADC/128), ADC must be in range [128;3968)

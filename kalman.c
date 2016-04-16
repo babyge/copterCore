@@ -7,10 +7,23 @@
 
 #include "kalman.h"
 
+struct Kalman kalman;
+
 /*
  * initializes the kalman matrices
  */
 void kalman_Init(void) {
+	uint8_t i;
+	for(i=0;i<KALMAN_STATES;i++){
+		kalman.x[i] = 0;
+		uint8_t j;
+		for(j=0;j<KALMAN_STATES;j++){
+			kalman.pValues[i][j] = 0;
+		}
+		for(j=0;j<KALMAN_MEASUREMENTS;j++){
+			kalman.kValues[i][j] = 0;
+		}
+	}
 	// set measurement vector
 	kalman.z[KALMAN_Z_ACC_X] = &accelerometer.X;
 	kalman.z[KALMAN_Z_ACC_Y] = &accelerometer.Y;
@@ -44,6 +57,7 @@ void kalman_Init(void) {
 	kalman.q[KALMAN_X_BIAS_X] = &config.attitudeKalman.CovStateGyroBias;//KALMAN_STATE_BIAS_NOISE;
 	kalman.q[KALMAN_X_BIAS_Y] = &config.attitudeKalman.CovStateGyroBias;//KALMAN_STATE_BIAS_NOISE;
 	kalman.q[KALMAN_X_BIAS_Z] = &config.attitudeKalman.CovStateGyroBias;//KALMAN_STATE_BIAS_NOISE;
+	kalman.timestamp = time_Get100us();
 }
 /*
  * calculates the next iteration of the kalman filter

@@ -15,7 +15,7 @@ typedef enum {
 	FLYING, CAREFREE, HEIGHT
 } FlightFunction_t;
 
-struct {
+struct FlightState{
 	// RC main signals (things like carefree already included).
 	// At 100% RC signal an inclination of config.maxAngle will be reached
 	float roll, pitch;
@@ -43,7 +43,9 @@ struct {
 	uint8_t flightTimeSeconds;
 	uint8_t flightTimeMinutes;
 	uint32_t timestampFlightStart;
-} flightState;
+};
+
+extern struct FlightState flightState;
 
 /*
  * initializes flightState (e.g. !flying, motorOff, signalLost

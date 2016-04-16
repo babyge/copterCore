@@ -49,7 +49,7 @@
 #define SWITCH_CAREFREE			12
 #define SWITCH_START_LAND		13
 
-struct {
+struct Receiver{
 	/*
 	 * values of the RC channels. The values are stored in full resolution
 	 * (-4800 to 4800). To convert to % divide by 32. Currently the lowest
@@ -77,7 +77,9 @@ struct {
 	uint8_t transmissionStarted;
 	// buffer for partial received channel values
 	uint16_t channelBuffer;
-} receiver;
+};
+
+extern struct Receiver receiver;
 
 /*
  * decodes channel 5 and 6 and calculates the 15 switch positions

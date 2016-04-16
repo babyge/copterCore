@@ -98,7 +98,7 @@ struct horizontalKalman {
 	uint32_t timestamp;
 };
 
-struct {
+struct Position{
 	struct {
 		float X, Y, Z;
 	} acceleration;
@@ -108,7 +108,9 @@ struct {
 	float X, Y, Z;
 	struct horizontalKalman horizontalX, horizontalY;
 	struct verticalKalman vertikalZ;
-} position;
+};
+
+extern struct Position position;
 
 /*
  * initializes kalman filters

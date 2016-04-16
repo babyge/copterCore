@@ -10,12 +10,14 @@
 
 #include "kalman.h"
 
-struct {
+struct Attitude{
 	float roll, pitch, yaw;
 	float sinRoll, sinPitch, sinYaw;
 	float cosRoll, cosPitch, cosYaw;
 	uint32_t timestamp;
-} attitude;
+};
+
+extern struct Attitude attitude;
 
 /*
  * performs a kalman filter update and calculates new values

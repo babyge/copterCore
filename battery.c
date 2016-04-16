@@ -1,5 +1,7 @@
 #include "battery.h"
 
+struct Battery battery;
+
 /*
  * calculates the number of battery cells
  */

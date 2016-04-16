@@ -33,7 +33,7 @@
 // current in mA consumed by all electronics (without motor load)
 #define BATTERY_NOLOAD_CURRENT	500
 
-struct {
+struct Battery {
 	// overall battery voltage (mV)
 	uint16_t voltage;
 //	// voltages of the single battery cells (mV)
@@ -47,7 +47,9 @@ struct {
 	uint16_t usedCapacity;
 	uint16_t current;
 	uint32_t timestamp;
-} battery;
+};
+
+extern struct Battery battery;
 
 /*
  * calculates the number of battery cells

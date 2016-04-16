@@ -39,7 +39,7 @@
 #define stdcommIncSendWritePos() com.SendBufferWritePos=(com.SendBufferWritePos+1)%STDCOMM_SEND_BUFFER_SIZE
 
 
-struct {
+struct Com{
 	uint8_t SendBuffer[STDCOMM_SEND_BUFFER_SIZE];
 	uint32_t SendBufferWritePos;
 	volatile uint32_t SendBufferReadPos;
@@ -50,8 +50,9 @@ struct {
 	uint8_t messageID;
 	//uint8_t MessageLength;
 	uint8_t messageStarted, messageComplete;
-} com;
+};
 
+extern struct Com com;
 
 /*
  * interprets incoming messages and sends the appropriate response

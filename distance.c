@@ -1,5 +1,7 @@
 #include "distance.h"
 
+struct Distance distance;
+
 // calculates distance(s) based on current ADC readings
 void distance_Update(void) {
 	// convert ADC value into voltage

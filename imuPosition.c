@@ -7,6 +7,8 @@
 
 #include "imuPosition.h"
 
+struct Position position;
+
 /*
  * initializes kalman filters
  */

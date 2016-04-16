@@ -10,7 +10,7 @@ typedef enum {
 	ROLL = 0, PITCH = 1, YAW = 2, ROLLVELOCITY = 3, PITCHVELOCITY = 4, YAWVELOCITY = 5
 } StepResponseType;
 
-struct {
+struct Stepresponse{
 	// step response active indicator
 	FlagStatus active;
 	// SET: currently in 'response'-period, RESET: currently in 'advance'-period
@@ -32,7 +32,9 @@ struct {
 	// memory space for step response
 	float responseData[MAX_STEP_RESPONSE_DATA_SIZE];
 	uint16_t dataCount;
-} stepresponse;
+};
+
+extern struct Stepresponse stepresponse;
 
 /*
  * initializes a new step response

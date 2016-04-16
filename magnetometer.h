@@ -27,7 +27,7 @@ typedef enum {START = 1, STOP = !START} MAG_ActivityTypeDef;
 /*************************************************************
  * magnetometer values
  ************************************************************/
-struct {
+struct Magnetometer{
 	float X, Y, Z, magnitude;
 	int16_t rawX, rawY, rawZ;
 	uint8_t rawValues[6];
@@ -40,9 +40,9 @@ struct {
 	} calibration;
 	uint32_t timestampUpdate, timestampChange;
 	FlagStatus valid;
-} magnetometer;
+};
 
-
+extern struct Magnetometer magnetometer;
 
 /*
  * writes the values from magDataRX into the magnetometer structur

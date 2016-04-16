@@ -1,5 +1,7 @@
 #include "controller.h"
 
+struct Control control;
+
 /*
  * resets all controllers and initializes the pointers in the controller structs
  */

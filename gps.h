@@ -13,7 +13,7 @@
 #define GPS_COMMAND_BINARY		1
 #define GPS_COMMAND_38400		2
 
-struct {
+struct GPS{
 	// coordinates, 10000000LSB/°
 	int32_t latitude, longitude;
 	// measured height above sea level in cm
@@ -55,7 +55,9 @@ struct {
 	uint8_t bytecount;
 	FlagStatus sentenceComplete, sentenceStarted;
 	uint32_t timestamp;
-} gps;
+};
+
+extern struct GPS gps;
 
 //typedef enum {GPS_RMC, GPS_GSA, GPS_GGA, GPS_GSV, GPS_UNKNOWN} GPSSentenceType;
 

@@ -1,5 +1,7 @@
 #include "hott.h"
 
+struct Hott hott;
+
 /*
  * updates HoTT data when requested
  */

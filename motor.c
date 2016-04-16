@@ -1,5 +1,7 @@
 #include "motor.h"
 
+struct Motor motor;
+
 ///*
 // * calculates the necessary PWM value based on the current
 // * battery voltage and the thrust required

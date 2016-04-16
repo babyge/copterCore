@@ -1,5 +1,7 @@
 #include "stepresponse.h"
 
+struct Stepresponse stepresponse;
+
 /*
  * initializes a new step response
  * @param type			indicates the system which is tested. May be any of the following values: ROLL, PITCH, YAW

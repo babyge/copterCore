@@ -24,7 +24,7 @@
 #define ADC_SCK				GPIO_Pin_3
 #define ADC_SDO				GPIO_Pin_4
 
-struct {
+struct Pressure{
 	// height in m
 	float height;
 	// temperature of the pressure sensor in °C
@@ -45,7 +45,9 @@ struct {
 	FlagStatus valid;
 	// system time in milliseconds at the last data update
 	uint32_t timestamp;
-} pressure;
+};
+
+extern struct Pressure pressure;
 
 /*
  * retrieves the temperature profile from the EEPROM

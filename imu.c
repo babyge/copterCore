@@ -7,6 +7,8 @@
 
 #include "imu.h"
 
+struct Attitude attitude;
+
 /*
  * performs a kalman filter update and calculates new values
  * for roll, pitch and yaw. For proper function this method

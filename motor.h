@@ -27,7 +27,7 @@
 // motor output scaling (should result in ~2000 dynamic range)
 #define MOTOR_PPMSCALE		8
 
-struct {
+struct Motor{
 	// motor velocities
 	int16_t velocity[MOTOR_MAXNUM];
 	// motor currents in 100mA
@@ -44,7 +44,9 @@ struct {
 		uint8_t active;
 		uint8_t PWM[MOTOR_MAXNUM];
 	} manual;
-} motor;
+};
+
+extern struct Motor motor;
 
 ///*
 // * calculates the necessary PWM value based on the current

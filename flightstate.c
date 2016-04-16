@@ -1,5 +1,7 @@
 #include "flightstate.h"
 
+struct FlightState flightState;
+
 /*
  * initializes flightState (e.g. !flying, motorOff, signalLost
  */

@@ -76,7 +76,7 @@
 #define HOTT_DOWN			0x0B
 #define HOTT_SET			0x09
 
-struct {
+struct Hott{
 	/**********************************
 	 * data containing output values
 	 * (is accessed by usart.h for
@@ -270,7 +270,9 @@ struct {
 		char text[8 * 21];
 		uint8_t endbyte;
 	} text;
-} hott;
+};
+
+extern struct Hott hott;
 
 /*
  * updates HoTT data when requested

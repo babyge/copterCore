@@ -7,6 +7,8 @@
 
 #include "magnetometer.h"
 
+struct Magnetometer magnetometer;
+
 /*
  * writes the values from magDataRX into the magnetometer structur
  */
