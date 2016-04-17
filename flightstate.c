@@ -31,10 +31,6 @@ void flightState_Update(void) {
 					flightState.flightTimeMinutes = 0;
 					flightState.flightTimeSeconds = 0;
 					flightState.timestampFlightStart = time_GetMillis();
-//					// all control structures to manual
-//					controller_SetHorizontalCtrlStruct(HORI_MANUAL);
-//					controller_SetVerticalCtrlStruct(VERT_MANUAL);
-//					controller_SetYawCtrlStruct(YAW_MANUAL);
 					stdComm_puts("flight started\n");
 					log_LogFileEntry("FLIGHT STARTED");
 					log_FlightLogStartRequest();
@@ -76,8 +72,6 @@ void flightState_Update(void) {
 				flightState.carefree = 0;
 				flightState.heightControl = 0;
 				flightState.heightVario = 0;
-//				// disable all control structures
-//				controller_SetControlStructure(CONTROL_STRUCTURE_NO_ACTION);
 				stdComm_puts("flight stopped\n");
 				log_LogFileEntry("FLIGHT STOPPED");
 				log_FlightLogStopRequest();
@@ -106,6 +100,26 @@ void flightState_Update(void) {
 			}
 
 			/*********************************************
+			 * handle heading lock
+			 ********************************************/
+			if (receiver.switches[SWITCH_HEADING_LOCK] && !flightState.headingLock) {
+				if (flightState_FunctionAvailable(HEADINGLOCK)) {
+					// activate heading lock
+					flightState.headingLock = 1;
+					flightState.lockHeading = attitude.yaw;
+					log_LogFileEntry("activated heading lock");
+				} else {
+					hott.speak = SPEAK_ERR_SENSOR;
+				}
+			} else if ((!receiver.switches[SWITCH_HEADING_LOCK]
+					|| !flightState_FunctionAvailable(HEADINGLOCK))
+					&& flightState.headingLock) {
+				// heading lock deactivated
+				flightState.headingLock = 0;
+				log_LogFileEntry("deactivated heading lock");
+			}
+
+			/*********************************************
 			 * handle height control
 			 ********************************************/
 			if (!receiver.switches[SWITCH_HEIGHT_OFF]
@@ -115,8 +129,6 @@ void flightState_Update(void) {
 					flightState.heightControl = 1;
 					log_LogFileEntry("activated height control");
 					hott.speak = SPEAK_ALTITUDE_ON;
-//					controller_SetControlStructure(
-//					CONTROL_STRUCTURE_VARIOHEIGHT);
 				} else {
 					// no valid pressure data -> no height control possible
 					hott.speak = SPEAK_ERR_SENSOR;
@@ -129,7 +141,6 @@ void flightState_Update(void) {
 				flightState.heightVario = 0;
 				log_LogFileEntry("deactivated height control");
 				hott.speak = SPEAK_ALTITUDE_OFF;
-//				controller_SetControlStructure(CONTROL_STRUCTURE_MANUAL);
 			}
 			if (flightState.heightControl) {
 				// differentiate between vario and height hold
@@ -139,13 +150,10 @@ void flightState_Update(void) {
 					flightState.heightVario = 0;
 					flightState.holdingHeight = position.Z;
 					log_LogFileEntry("height control mode: hold");
-//					controller_SetControlStructure(CONTROL_STRUCTURE_HEIGHT);
 				} else if (!receiver.switches[SWITCH_HEIGHT_HOLD]
 						&& !flightState.heightVario) {
 					flightState.heightVario = 1;
 					log_LogFileEntry("height control mode: vario");
-//					controller_SetControlStructure(
-//					CONTROL_STRUCTURE_VARIOHEIGHT);
 				}
 				if (pressure.valid != SET) {
 					// no valid pressure data -> no height control possible
@@ -155,7 +163,6 @@ void flightState_Update(void) {
 					log_LogFileEntry(
 							"deactivated height control due to faulty pressure sensor");
 					hott.speak = SPEAK_ALTITUDE_OFF;
-//					controller_SetControlStructure(CONTROL_STRUCTURE_MANUAL);
 				}
 			}
 			/*********************************************
@@ -182,7 +189,11 @@ void flightState_Update(void) {
 		// update control structures
 		if (flightState.flying) {
 			controller_SetHorizontalCtrlStruct(HORI_MANUAL);
-			controller_SetYawCtrlStruct(YAW_MANUAL);
+			if (flightState.headingLock) {
+				controller_SetYawCtrlStruct(YAW_ANGLE);
+			} else {
+				controller_SetYawCtrlStruct(YAW_MANUAL);
+			}
 			if (flightState.heightControl) {
 				if (flightState.heightVario) {
 					controller_SetVerticalCtrlStruct(VERT_VARIO);
@@ -318,6 +329,7 @@ uint8_t flightState_FunctionAvailable(FlightFunction_t func) {
 			res = 1;
 		break;
 	case CAREFREE:
+	case HEADINGLOCK:
 		if (flightState_FunctionAvailable(FLYING) && magnetometer.valid == SET)
 			res = 1;
 		break;

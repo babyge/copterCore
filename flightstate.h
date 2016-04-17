@@ -12,7 +12,7 @@
 #define MAXIMAL_START_POWER		5
 
 typedef enum {
-	FLYING, CAREFREE, HEIGHT
+	FLYING, CAREFREE, HEIGHT, HEADINGLOCK
 } FlightFunction_t;
 
 struct FlightState{
@@ -29,6 +29,7 @@ struct FlightState{
 	float howerPower;
 	uint32_t timestampHowerpowerUpdate;
 	float carefreeHeading;
+	float lockHeading;
 	float holdingHeight;
 	// state bit field
 	uint8_t motorOff :1;
@@ -39,6 +40,7 @@ struct FlightState{
 	uint8_t heightVario :1;
 	uint8_t landing :1;
 	uint8_t starting :1;
+	uint8_t headingLock :1;
 
 	uint8_t flightTimeSeconds;
 	uint8_t flightTimeMinutes;
