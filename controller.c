@@ -22,6 +22,8 @@ void controller_Init(void) {
 	control.angularVelocity.X.interval =
 			&config.controller[CONTROLLER_ANGULARVELOCITY_X].interval;
 	control.angularVelocity.X.actual = &kalman.x[KALMAN_X_GYRO_Y];
+	control.angularVelocity.X.useResidualOutput = RESET;
+	control.angularVelocity.X.useInputWrapAround = RESET;
 
 	control.angularVelocity.Y.P =
 			&config.controller[CONTROLLER_ANGULARVELOCITY_Y].P;
@@ -36,6 +38,8 @@ void controller_Init(void) {
 	control.angularVelocity.Y.interval =
 			&config.controller[CONTROLLER_ANGULARVELOCITY_Y].interval;
 	control.angularVelocity.Y.actual = &kalman.x[KALMAN_X_GYRO_X];
+	control.angularVelocity.Y.useResidualOutput = RESET;
+	control.angularVelocity.Y.useInputWrapAround = RESET;
 
 	control.angularVelocity.Z.P =
 			&config.controller[CONTROLLER_ANGULARVELOCITY_Z].P;
@@ -50,6 +54,8 @@ void controller_Init(void) {
 	control.angularVelocity.Z.interval =
 			&config.controller[CONTROLLER_ANGULARVELOCITY_Z].interval;
 	control.angularVelocity.Z.actual = &kalman.x[KALMAN_X_GYRO_Z];
+	control.angularVelocity.Z.useResidualOutput = RESET;
+	control.angularVelocity.Z.useInputWrapAround = RESET;
 
 	/*
 	 * angle controller
@@ -63,6 +69,9 @@ void controller_Init(void) {
 			&config.controller[CONTROLLER_ANGLE_X].upperLimit;
 	control.angle.X.interval = &config.controller[CONTROLLER_ANGLE_X].interval;
 	control.angle.X.actual = &attitude.pitch;
+	control.angle.X.useResidualOutput = RESET;
+	control.angle.X.useInputWrapAround = SET;
+	control.angle.X.wrapAroundLimit = M_PI;
 
 	control.angle.Y.P = &config.controller[CONTROLLER_ANGLE_Y].P;
 	control.angle.Y.I = &config.controller[CONTROLLER_ANGLE_Y].I;
@@ -73,6 +82,9 @@ void controller_Init(void) {
 			&config.controller[CONTROLLER_ANGLE_Y].upperLimit;
 	control.angle.Y.interval = &config.controller[CONTROLLER_ANGLE_Y].interval;
 	control.angle.Y.actual = &attitude.roll;
+	control.angle.Y.useResidualOutput = RESET;
+	control.angle.Y.useInputWrapAround = SET;
+	control.angle.Y.wrapAroundLimit = M_PI;
 
 	control.angle.Z.P = &config.controller[CONTROLLER_ANGLE_Z].P;
 	control.angle.Z.I = &config.controller[CONTROLLER_ANGLE_Z].I;
@@ -83,6 +95,9 @@ void controller_Init(void) {
 			&config.controller[CONTROLLER_ANGLE_Z].upperLimit;
 	control.angle.Z.interval = &config.controller[CONTROLLER_ANGLE_Z].interval;
 	control.angle.Z.actual = &attitude.yaw;
+	control.angle.Z.useResidualOutput = RESET;
+	control.angle.Z.useInputWrapAround = SET;
+	control.angle.Z.wrapAroundLimit = M_PI;
 
 	/*
 	 * height controller
@@ -97,6 +112,8 @@ void controller_Init(void) {
 	control.velocity.Z.interval =
 			&config.controller[CONTROLLER_ASCEND].interval;
 	control.velocity.Z.actual = &position.velocity.Z;
+	control.velocity.Z.useResidualOutput = RESET;
+	control.velocity.Z.useInputWrapAround = RESET;
 
 	control.position.Z.P = &config.controller[CONTROLLER_HEIGHT].P;
 	control.position.Z.I = &config.controller[CONTROLLER_HEIGHT].I;
@@ -108,6 +125,8 @@ void controller_Init(void) {
 	control.position.Z.interval =
 			&config.controller[CONTROLLER_HEIGHT].interval;
 	control.position.Z.actual = &position.Z;
+	control.position.Z.useResidualOutput = RESET;
+	control.position.Z.useInputWrapAround = RESET;
 
 	// controller reset
 	controller_Reset(&control.angularVelocity.X);
@@ -223,6 +242,18 @@ void controller_SetYawCtrlStruct(YawCtrlStruct newStruct) {
 		controller_Reset(&control.angularVelocity.Z);
 		control.angularVelocity.Z.enable = SET;
 		break;
+	case YAW_ANGLE:
+		// hold specified yaw angle
+		// yaw controller
+		control.angle.Z.input = &flightState.lockHeading;
+		control.angularVelocity.Z.input = &control.angle.Z.output;
+		// reset used controllers
+		controller_Reset(&control.angularVelocity.Z);
+		controller_Reset(&control.angle.Z);
+		// enable used controllers
+		control.angle.Z.enable = SET;
+		control.angularVelocity.Z.enable = SET;
+		break;
 	case YAW_VELOCITY:
 		// yaw controller
 		control.angularVelocity.Z.input = &stepresponse.inputSignal;
@@ -257,6 +288,14 @@ void controller_PID(struct pidControl *c) {
 		if (currentTime - c->timestamp >= *c->interval) {
 			// controller error
 			float e = *(c->input) - *(c->actual);
+			if (c->useInputWrapAround == SET) {
+				// if input wrap-around is enabled, constrain error
+				if (e > c->wrapAroundLimit) {
+					e -= 2 * c->wrapAroundLimit;
+				} else if (e < -c->wrapAroundLimit) {
+					e += 2 * c->wrapAroundLimit;
+				}
+			}
 			// calculate interval since last update
 			float timeDiff = (currentTime - c->timestamp) * 0.0001f;
 			c->timestamp = currentTime;
@@ -305,6 +344,5 @@ void controller_Reset(struct pidControl *c) {
 	c->D_last = 0;
 	c->integral = 0;
 	c->residualOutput = 0;
-	c->useResidualOutput = RESET;
 	c->timestamp = time_Get100us();
 }

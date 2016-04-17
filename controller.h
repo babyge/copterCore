@@ -25,9 +25,8 @@ typedef enum {
 } HorizontalCtrlStruct;
 
 typedef enum {
-	YAW_NO_ACTION = 0, YAW_MANUAL = 1, YAW_VELOCITY = 2
+	YAW_NO_ACTION = 0, YAW_MANUAL = 1, YAW_VELOCITY = 2, YAW_ANGLE = 3
 } YawCtrlStruct;
-
 
 struct pidControl {
 	// enable/disable the complete controller
@@ -40,6 +39,12 @@ struct pidControl {
 	float output, residualOutput;
 	// enable/disable the residual output
 	FlagStatus useResidualOutput;
+	// enable/disable input wrap-around
+	// (for angle controllers)
+	FlagStatus useInputWrapAround;
+	// maximum 'distance' between input and actual value
+	// (if it is bigger, the other way around is actually faster)
+	float wrapAroundLimit;
 	// controller parameters (should be >= 0)
 	float *P, *I, *D;
 	// maximal output interval
@@ -55,7 +60,7 @@ struct pidControl {
 	uint16_t *interval;
 };
 
-struct Control{
+struct Control {
 	struct {
 		struct pidControl X, Y, Z;
 	} angularVelocity;
