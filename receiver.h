@@ -44,6 +44,7 @@
 // receiver switch functions (MC16 switch label - 1)
 #define SWITCH_HEIGHT_OFF		5
 #define SWITCH_HEIGHT_HOLD		4
+#define SWITCH_HEADING_LOCK		8
 #define SWITCH_MOTOR_OFF		11
 #define SWITCH_FLYING			10
 #define SWITCH_CAREFREE			12
