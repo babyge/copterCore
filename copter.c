@@ -73,6 +73,9 @@ void copter_MainProgram(void) {
 
 	led_Cmd(3, LED_ON);
 
+	// no valid receiver signal yet
+	led_Cmd(0, LED_ON);
+
 	// set timer to trigger GPS initialization
 	uint32_t GPSInitTimer;
 	time_SetTimer(&GPSInitTimer, 3000);
@@ -192,7 +195,7 @@ void copter_UnimportantTasks(void) {
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("TIMEOUT: no accelerometer data");
 	}
-	if (currentTime - accChangeTime >= 30 && accelerometer.valid == SET) {
+	if (currentTime - accChangeTime >= 100 && accelerometer.valid == SET) {
 		accelerometer.valid = RESET;
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("ERROR: accelerometer data frozen");
@@ -203,7 +206,7 @@ void copter_UnimportantTasks(void) {
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("TIMEOUT: no magnetometer data");
 	}
-	if (currentTime - magChangeTime >= 30 && magnetometer.valid == SET) {
+	if (currentTime - magChangeTime >= 100 && magnetometer.valid == SET) {
 		magnetometer.valid = RESET;
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("ERROR: magnetometer data frozen");
@@ -214,7 +217,7 @@ void copter_UnimportantTasks(void) {
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("TIMEOUT: no gyro data");
 	}
-	if (currentTime - gyroChangeTime >= 30 && gyro.valid == SET) {
+	if (currentTime - gyroChangeTime >= 100 && gyro.valid == SET) {
 		gyro.valid = RESET;
 		hott.speak = SPEAK_ERR_SENSOR;
 		log_LogFileEntry("ERROR: gyro data frozen");
