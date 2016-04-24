@@ -76,7 +76,16 @@
 #define HOTT_DOWN			0x0B
 #define HOTT_SET			0x09
 
-struct Hott{
+#define HOTT_MENU_OVERVIEW	0
+#define HOTT_MENU_ACC		1
+#define HOTT_MENU_GYRO		2
+#define HOTT_MENU_MAG		3
+#define HOTT_MENU_BARO		4
+#define HOTT_MENU_MOTORS	5
+// must always be last!
+#define HOTT_N_MENUS		6
+
+struct Hott {
 	/**********************************
 	 * data containing output values
 	 * (is accessed by usart.h for
@@ -264,11 +273,13 @@ struct Hott{
 		uint8_t EndByte;   	// 0x7D
 	} vario;
 	struct {
-		uint8_t startbyte;
-		uint8_t packedId;
-		uint8_t alarm;
+		uint8_t StartByte;
+		uint8_t Packed_ID;
+		uint8_t WarnBeep;
 		char text[8 * 21];
-		uint8_t endbyte;
+		uint8_t EndByte;
+
+		uint8_t selectedMenu;
 	} text;
 };
 
@@ -282,5 +293,29 @@ void hott_Update(void);
  * processes received bytes
  */
 void hott_IncomingData(uint8_t data);
+
+/*
+ * handles user inputs in the text menu
+ */
+void hott_KeyPressed(void);
+
+/*
+ * fills the text buffer with valid data
+ */
+void hott_SetTextBuffer(void);
+
+/*
+ * Clears the entire text buffer
+ */
+void hott_ClearText(void);
+
+/*
+ * writes a string into the text buffer
+ */
+void hott_Print(uint8_t x, uint8_t y, char *text, uint8_t inverted);
+
+void hott_PrintInt(uint8_t x, uint8_t y, int32_t n, uint8_t inverted);
+
+void hott_PrintFloat(uint8_t x, uint8_t y, float f, uint8_t inverted);
 
 #endif /* HOTT_H_ */
