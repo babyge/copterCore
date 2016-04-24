@@ -7,7 +7,6 @@
 
 #include "stdcomm.h"
 
-
 struct Com com;
 /*
  * interprets incoming messages and sends the appropriate response
@@ -98,6 +97,34 @@ void stdComm_MessageHandler(uint8_t id) {
 		stdComm_SendMessage(MESSAGE_ACK, 0, 0);
 		motor_setAuto();
 		break;
+	case MESSAGE_REQUEST_SENSOR_STATE: {
+		uint8_t sensorState[2] = { 0x00, 0x00 };
+		if (accelerometer.valid)
+			sensorState[0] |= 0x01;
+		if (gyro.valid)
+			sensorState[0] |= 0x02;
+		if (magnetometer.valid)
+			sensorState[0] |= 0x04;
+		if (pressure.valid)
+			sensorState[0] |= 0x08;
+		if (gps.available)
+			sensorState[0] |= 0x10;
+		if (gps.FixValid)
+			sensorState[0] |= 0x20;
+		if (distance.valid)
+			sensorState[0] |= 0x40;
+		if (externalSensor.valid)
+			sensorState[0] |= 0x80;
+		if (receiver.valid)
+			sensorState[1] |= 0x01;
+		if (receiver.failsafe)
+			sensorState[1] |= 0x02;
+		stdComm_SendMessage(MESSAGE_SEND_SENSOR_STATE, sensorState, 2);
+	}
+		break;
+	default:
+		// unsupported message id
+		stdComm_SendMessage(MESSAGE_NACK, 0, 0);
 	}
 	com.messageComplete = 0;
 }
