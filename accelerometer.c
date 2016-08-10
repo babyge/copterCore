@@ -40,12 +40,25 @@ void acc_Update(void) {
 	accY *= ACC_SCALE;
 	accZ *= ACC_SCALE;
 
+	/*
+	 * matrix rotation
+	 */
+	float rX = config.AccGyroMatrix[0][0] * accX
+			+ config.AccGyroMatrix[0][1] * accY
+			+ config.AccGyroMatrix[0][2] * accZ;
+	float rY = config.AccGyroMatrix[1][0] * accX
+			+ config.AccGyroMatrix[1][1] * accY
+			+ config.AccGyroMatrix[1][2] * accZ;
+	float rZ = config.AccGyroMatrix[2][0] * accX
+			+ config.AccGyroMatrix[2][1] * accY
+			+ config.AccGyroMatrix[2][2] * accZ;
+
 	accelerometer.X = accelerometer.X * (1 - config.alphaAcc)
-			+ accX * config.alphaAcc;
+			+ rX * config.alphaAcc;
 	accelerometer.Y = accelerometer.Y * (1 - config.alphaAcc)
-			+ accY * config.alphaAcc;
+			+ rY * config.alphaAcc;
 	accelerometer.Z = accelerometer.Z * (1 - config.alphaAcc)
-			+ accZ * config.alphaAcc;
+			+ rZ * config.alphaAcc;
 
 	accelerometer.magnitude = sqrtf(
 			accelerometer.X * accelerometer.X
@@ -95,9 +108,9 @@ void acc_Calibrate(void) {
 	sumX /= 100;
 	sumY /= 100;
 	sumZ /= 100;
-	config.accXOffset = sumX;
-	config.accYOffset = sumY;
-	config.accZOffset = sumZ - 1.0f / ACC_SCALE;
+	config.accXOffset = sumX - 1.0f / ACC_SCALE * config.AccGyroMatrix[2][0];
+	config.accYOffset = sumY - 1.0f / ACC_SCALE * config.AccGyroMatrix[2][1];
+	config.accZOffset = sumZ - 1.0f / ACC_SCALE * config.AccGyroMatrix[2][2];
 	log_LogFileEntry("calibrated accelerometer.");
 	buzzer_Signal(1);
 }
