@@ -7,14 +7,19 @@ void distance_Update(void) {
 	// convert ADC value into voltage
 	// 3V3/4095 -> 0.0008058608
 	float voltage = ((float) adc.raw[1]) * 0.0008058608f;
-	distance.bottom = distance_SharpGP2D12ToMeter(
-			voltage) - DISTANCE_SENSOR_ABOVE_GROUND;
-	distance.timestamp = time_GetMillis();
-	if (distance.bottom < SHARP_MAXIMUM_DISTANCE) {
-		distance.valid = SET;
+	if (voltage > SHARP_MINIMUM_VOLTAGE) {
+		distance.bottom = distance_SharpGP2D12ToMeter(
+				voltage) - DISTANCE_SENSOR_ABOVE_GROUND;
+		distance.timestamp = time_GetMillis();
+		if (distance.bottom
+				< SHARP_MAXIMUM_DISTANCE - DISTANCE_SENSOR_ABOVE_GROUND) {
+			distance.valid = SET;
+		} else {
+			// voltage outside of sensor specifications
+			// -> no sensor connected or sensor error
+			distance.valid = RESET;
+		}
 	} else {
-		// voltage outside of sensor specifications
-		// -> no sensor connected or sensor error
 		distance.valid = RESET;
 	}
 }

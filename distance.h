@@ -12,6 +12,7 @@
 
 #define DISTANCE_SENSOR_ABOVE_GROUND	0.13f
 #define SHARP_MAXIMUM_DISTANCE			1.0f
+#define SHARP_MINIMUM_VOLTAGE			0.2f
 
 struct Distance{
 	float bottom;
