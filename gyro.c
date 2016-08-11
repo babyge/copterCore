@@ -39,15 +39,15 @@ void gyro_Update(void) {
 	/*
 	 * matrix rotation
 	 */
-	float rX = config.AccGyroMatrix[0][0] * gyroX
-			+ config.AccGyroMatrix[0][1] * gyroY
-			+ config.AccGyroMatrix[0][2] * gyroZ;
-	float rY = config.AccGyroMatrix[1][0] * gyroX
-			+ config.AccGyroMatrix[1][1] * gyroY
-			+ config.AccGyroMatrix[1][2] * gyroZ;
-	float rZ = config.AccGyroMatrix[2][0] * gyroX
-			+ config.AccGyroMatrix[2][1] * gyroY
-			+ config.AccGyroMatrix[2][2] * gyroZ;
+	float rX = config.GyroMatrix[0][0] * gyroX
+			+ config.GyroMatrix[0][1] * gyroY
+			+ config.GyroMatrix[0][2] * gyroZ;
+	float rY = config.GyroMatrix[1][0] * gyroX
+			+ config.GyroMatrix[1][1] * gyroY
+			+ config.GyroMatrix[1][2] * gyroZ;
+	float rZ = config.GyroMatrix[2][0] * gyroX
+			+ config.GyroMatrix[2][1] * gyroY
+			+ config.GyroMatrix[2][2] * gyroZ;
 
 	gyro.X = gyro.X * (1 - config.alphaGyro) + rX * config.alphaGyro;
 	gyro.Y = gyro.Y * (1 - config.alphaGyro) + rY * config.alphaGyro;
